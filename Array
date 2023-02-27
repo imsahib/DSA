@@ -1,1 +1,84 @@
-
+struct ArrayADT
+{
+    int capacity;
+    int lastIndex;
+    int *ptr;
+};
+struct ArrayADT* createArray(int cap)
+{
+    struct ArrayADT *arr;
+    arr=(struct ArrayADT*)malloc(sizeof(struct ArrayADT));
+    arr->capacity=cap;
+    arr->lastIndex=-1;
+    arr->ptr=(int*)malloc(sizeof(int)*cap);
+    return arr;
+}
+void append(struct ArrayADT *arr,int data)
+{
+    if(arr->lastIndex==arr->capacity-1)
+        printf("\nOverflow");
+    else
+    {
+        arr->lastIndex++;
+        arr->ptr[arr->lastIndex]=data;
+    }
+}
+void insert(struct ArrayADT *arr,int index,int data)
+{
+    int i;
+    if(index<0||index>arr->lastIndex+1)
+        printf("\nInvalid Index");
+    else if(arr->lastIndex==arr->capacity-1)
+        printf("\nOverflow");
+    else
+    {
+        for(i=arr->lastIndex;i>index;i++)
+            arr->ptr[i+1]=arr->ptr[i];
+        arr->ptr[index]=data;
+        arr->lastIndex+=1;
+    }
+}
+void del(struct ArrayADT *arr,int index)
+{
+    int i;
+    if(index<0||index>arr->lastIndex)
+        printf("\nInvalidIndex or Undeflow");
+    else
+    {
+        for(i=index;i<arr->lastIndex;i++)
+            arr->ptr[i]=arr->ptr[i+1];
+            arr->lastIndex-=1;
+    }
+}
+void edit(struct ArrayADT *arr,int index,int newData)
+{
+    if(index<0||index>arr->lastIndex)
+        printf("\nInvalidIndex");
+    else
+        arr->ptr[index]=newData;
+}
+int count(struct ArrayADT *arr)
+{
+    return arr->lastIndex+1;
+}
+int getData(struct ArrayADT *arr,int index)
+{
+    if(index<0 ||index>arr->lastIndex)
+    {
+        printf("Invalid Index");
+        return -1;
+    }
+    else
+        return arr->ptr[index];
+}
+int main()
+{
+    struct ArrayADT *arr;
+    arr=createArray(6);
+    append(arr,10);
+    insert(arr,1,20);
+    del(arr,0);
+    int i;
+    for(i=0;i<count(arr);i++)
+        printf("%d ",getData(arr,i));
+}
