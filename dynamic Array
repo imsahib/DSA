@@ -1,1 +1,211 @@
+#include <stdio.h>
+#include<stdlib.h>
+struct DynamicArrayADT
+{
+    int capacity;
+    int lastIndex;
+    int *ArrayPtr;
+};
+struct DynamicArrayADT* createArray(int cap)
+{
+    struct DynamicArrayADT *arr;
+    arr=(struct DynamicArrayADT*)malloc(sizeof(struct DynamicArrayADT));
+    arr->capacity=cap;
+    arr->lastIndex=-1;
+    arr->ArrayPtr=(int*)malloc(sizeof(int)*cap);
+    return arr;
+}
+void append(struct DynamicArrayADT *arr,int info)
+{
+    if(arr->lastIndex==arr->capacity-1)
+    {
+        arr= CreateDoubleArray(arr);
+        printf("\nsize of array is now %d\n",arr->capacity);
+        arr->lastIndex++;
+        arr->ArrayPtr[arr->lastIndex]=info;
+    }
+    else
+    {
+        arr->lastIndex++;
+        arr->ArrayPtr[arr->lastIndex]=info;
+    }
+}
+void insertAtIndex(struct DynamicArrayADT *arr,int index,int info)
+{
+    int i;
+    if(index<0 ||index>arr->lastIndex+1)
+        printf("\nNot allowed\n\n");
+    else if(arr->lastIndex==arr->capacity-1)
+      {
+          CreateDoubleArray(arr);
+          printf("\nsize of array is now %d\n\n",arr->capacity);
+      }
+    else
+    {
+        if(index==arr->lastIndex+1)
+            arr->ArrayPtr[index]=info;
+        else
+        {
+             i=arr->lastIndex;
+             while(i>=index)
+             {
+                arr->ArrayPtr[i+1]=arr->ArrayPtr[i];
+                i--;
+             }
+             arr->ArrayPtr[index]=info;
+        }
+       arr->lastIndex++;
+    }
+}
+void delete(struct DynamicArrayADT *arr,int index)
+{
+    int i;
+    if (arr->lastIndex==-1||index<0)
+        printf("\nunderflow\n\n");
+    else if(index>(arr->capacity-1)||index>arr->lastIndex)
+        printf("\noverflow\n\n");
+    else
+    {
+        i=index;
+        while(i<arr->lastIndex)
+        {
+            arr->ArrayPtr[i]=arr->ArrayPtr[i+1];
+            i++;
+        }
+        arr->lastIndex--;
+        if(arr->lastIndex<=arr->capacity/2)
+          CreateHalfArray(arr);
+       printf("\nsize of array is now %d\n\n",arr->capacity);
+    }
 
+}
+void CreateDoubleArray(struct DynamicArrayADT *arr)
+{
+    int *temp;
+    int i=0,twice;
+    arr->capacity*=2;
+    temp=(int*)malloc(sizeof(int)*arr->capacity);
+    while(i!=arr->lastIndex+1)
+    {
+        temp[i]=arr->ArrayPtr[i];
+        i++;
+    }
+    free(arr->ArrayPtr);
+    arr->ArrayPtr=temp;
+}
+void CreateHalfArray(struct DynamicArrayADT *arr)
+{
+    int *temp;
+    int i=0;
+    arr->capacity/=2;
+    temp=(int*)malloc(sizeof(int)*arr->capacity);
+    while(i!=arr->lastIndex+1)
+    {
+        temp[i]=arr->ArrayPtr[i];
+        i++;
+    }
+    free(arr->ArrayPtr);
+    arr->ArrayPtr=temp;
+}
+void edit(struct DynamicArrayADT *arr,int index,int info)
+{
+    if(index<0||arr->lastIndex==-1)
+        printf("\nunderflow\n\n");
+    else if(index>arr->lastIndex)
+        printf("\noverflow\n\n");
+    else
+        arr->ArrayPtr[index]=info;
+}
+int count(struct DynamicArrayADT *arr)
+{
+    if(arr->lastIndex==-1)
+        return 0;
+    else
+        return (arr->lastIndex+1);
+}
+void viewList(struct DynamicArrayADT *arr)
+{
+    int i=0;
+    if(arr->lastIndex==-1)
+        printf("\nList is empty\n\n");
+    else
+    {
+        while(i!=arr->lastIndex+1)
+        {
+            printf("%d ",arr->ArrayPtr[i]);
+            i++;
+        }
+    }
+}
+void getDataAtIndex(struct DynamicArrayADT *arr,int index)
+{
+    if(index<0||index>arr->lastIndex||arr->lastIndex==-1)
+        printf("\nunderflow or overflow\n\n");
+    else
+        printf("\nValue at index %d is %d\n\n",index,arr->ArrayPtr[index]);
+}
+int menu()
+{
+    int choice;
+    printf("\n1.APPEND");
+    printf("\n2.InsertAtIndex");
+    printf("\n3.DeleteAtIndex");
+    printf("\n4.EditAtIndex");
+    printf("\n5.getDataAtIndex");
+    printf("\n6.Exit");
+    printf("\n\nENTER YOUR CHOICE\n");
+    scanf("%d",&choice);
+    return choice;
+}
+void main()
+{
+    int index,val,length;
+    struct DynamicArrayADT *arr;
+    printf("Enter length of Array\n");
+    scanf("%d",&length);
+    arr=createArray(length);
+    for(;1;)
+    {
+
+        viewList(arr);
+        printf("\n");
+        switch(menu())
+        {
+            case 1:
+                    printf("\nEnter a number to append");
+                    scanf("%d",&val);
+                    append(arr,val);
+                    break;
+            case 2:
+                    printf("\nEnter a number to insert");
+                    scanf("%d",&val);
+                    printf("Enter index in which you want to insert");
+                    scanf("%d",&index);
+                    insertAtIndex(arr,index,val);
+                    break;
+            case 3:
+                    printf("Enter index in which you want to delete");
+                    scanf("%d",&index);
+                    delete(arr,index);
+                    break;
+            case 4:
+                    printf("\nEnter a number to insert");
+                    scanf("%d",&val);
+                    printf("Enter index in which you want to edit");
+                    scanf("%d",&index);
+                    edit(arr,index,val);
+                    break;
+            case 5:
+                    printf("Enter index in which you want to see ");
+                    scanf("%d",&index);
+                    getDataAtIndex(arr,index);
+                    break;
+            case 6:
+                    exit(0);
+            default:
+                    printf("Invalid choice");
+        }
+    }
+
+
+}
