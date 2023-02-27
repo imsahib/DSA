@@ -1,1 +1,120 @@
+#include <stdio.h>
+struct node
+{
+    int item;
+    struct node *next;
+};
+void insertAtStart(struct node **s,int data)
+{
+    struct node *n;
+    n=(struct node*)malloc(sizeof(struct node));
+    n->item=data;
+    n->next=*s;
+    *s=n;
+}
+void insertAtLast(struct node **s,int data)
+{
+    struct node *n,*t;
+    n=(struct node *)malloc(sizeof(struct node));
+    n->item=data;
+    n->next=NULL;
+    if(*s==NULL)
+        *s=n;
+    else
+    {
+        t=*s;
+        while(t->next!=NULL)
+            t=t->next;
+        t->next=n;
+    }
+}
+struct node* search(struct node *start,int data)
+{
+    while(start)
+    {
+        if(start->item==data)
+            return start;
+        start=start->next;
+    }
+    return start;
+}
+void insertAfter(struct node *t,int data)        // this function takes the adress that is return by search function, and data which is inserted after that.
+{
+    struct node*n;
+    if(t)
+    {
+        n=(struct node*)malloc(sizeof(struct node));
+        n->item=data;
+        n->next=t->next;
+        t->next=n;
+    }
+}
+void deleteFirst(struct node **s)
+{
+    struct node *t;
+    if(*s==NULL)
+        printf("underflow");
+    else
+    {
+        t=*s;
+        *s=t->next;
+        free(t);
+    }
+}
+void deleteLast(struct node**s)
+{
+    struct node *t1,*t2;
+    if(*s==NULL)              //list is empty
+        printf("Underflow");
+    else
+    {
+        t1=*s;
+        t2=NULL;
+        while(t1->next!=NULL)
+        {
+            t2=t1;
+            t1=t1->next;
+        }
+        if(t2==NULL)         //list having single node
+        {
+            *s=NULL;
+            free(t1);
+        }
+        else                 // list having atleast 2 nodes
+        {
+            t2->next=NULL;
+            free(t1);
+        }
+    }
+
+}
+void deleteNode(struct node **s,int data)
+{
+    struct node *t,*r;
+    t=search(*s,data);
+    if(t==NULL)
+        printf("Element not found");
+    else
+    {
+        if(*s==t)
+            deleteFirst(t);
+        else
+        {
+            r=*s;
+            while(r->next!=t)
+                r=r->next;
+            r->next=t->next;
+            free(t);
+        }
+    }
+
+}
+
+
+main()
+{
+    struct node *start=NULL;
+    insertAtStart(&start,20);  //call by reference
+
+}
 
