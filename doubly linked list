@@ -1,0 +1,218 @@
+#include<stdio.h>
+struct node
+{
+    struct node *prev;
+    int info;
+    struct node *next;
+};
+void insertAtBegin(struct node**s,int val)
+{
+    struct node *temp;
+    temp=(struct node*)malloc(sizeof(struct node));
+    temp->info=val;
+    temp->prev=NULL;
+    temp->next=*s;
+    *s=temp;
+}
+void insertAtLast(struct node **s,int val)
+{
+    struct node*temp,*t;
+    temp=(struct node*)malloc(sizeof(struct node));
+    temp->prev=NULL;
+    temp->next=NULL;
+    if(*s==NULL)
+        *s=temp;
+    else
+    {
+        t=*s;
+        while(t->next!=NULL)
+            t=t->next;
+        t->next=temp;
+        temp->prev=t;
+    }
+}
+void insertAfterValue(struct node *p,int bval,int val)
+{
+    struct node *temp;
+    temp=(struct node*)malloc(sizeof(struct node));
+    temp->info=val;
+    temp->prev=NULL;
+    temp->next=NULL;
+    if(p==NULL)
+        printf("list is empty");
+    else
+    {
+        while(p->info!=bval && p->next!=NULL)
+            p=p->next;
+        if(p->info==bval)
+        {
+            temp->next=p->next;
+            temp->prev=p;
+            p->next=temp;
+        }
+        else
+            printf("data not found");
+
+    }
+
+}
+int deleteAtFirst(struct node **s)
+{
+    int i;
+  struct node *temp;
+  if (*s==NULL)
+    printf("list is empty");
+  else
+  {
+    temp=*s;
+     i= temp->info;
+    *s=(*s)->next;
+    free(temp);
+    return i;
+  }
+
+
+}int deleteAtLast(struct node**s)
+{
+   int i;
+    struct node *t,*temp,*p;
+    if(*s==NULL)
+        printf("List is Empty");
+    else
+    {
+        t=*s;
+        while(t->next!=NULL)
+            t=t->next;
+        p=t;
+        i=p->info;
+        t=t->prev;
+        t->next=NULL;
+        free(p);
+        return i;
+    }
+}
+void deleteAfterValue(struct node *p,int val)
+{
+    struct node *temp,*t,*a;
+    if(p==NULL)
+        printf("List is empty");
+    else
+    {
+        while(p->info==val && p->next!=NULL)
+            p=p->next;
+        if(p->info==val)
+            {
+                t=p->next;
+                p->next=t->next;
+                a=p->next;
+                a->prev=p;
+                free(t);
+            }
+        else
+            printf("Not Found");
+
+    }
+
+}
+void viewList(struct node *p)
+{
+   if(p==NULL)
+        printf("\nlist is empty");
+   else
+   {
+       while(p->next!=NULL)
+       {
+           printf("%d ",p->info);
+           p=p->next;
+       }
+   }
+
+}
+
+
+/*void fun()
+{
+    struct node *start=NULL;
+    insertAtBegin(&start,20)  // call by referance
+    insertAtLast(&start,12)   // call by reference
+    insertAfterValue(start,34,67) // call by value
+    deleteAtFirst(&start)       //call by reference
+    deleteAtLast(&start)        //call by reference
+    deleteAfterValue(start,34);// cakl by value
+}*/
+
+void main()
+{
+
+{
+    // menu driven program
+    int choice,val,value;
+    struct node *start=NULL;
+    printf("\n1.InsertAtBegin");
+    printf("\n2.InseretAtLast");
+    printf("\n3.InsertAfterValue");
+    printf("\n4.DeleteAtBegin");
+    printf("\n5.DeleteAtLast");
+    printf("\n6.DeleteAfterValue");
+   // printf("\n7.NumberOfListItems");
+    printf("\n8.ViewList");
+    printf("\n9.EXIT");
+    while(1)
+    {
+        printf("\n\nEnter your choice");
+        scanf("%d",&choice);
+        switch(choice)
+        {
+            case 1:
+                printf("\nEnter number");
+                scanf("%d",&value);
+                insertAtBegin(&start,value);
+                break;
+            case 2:
+                 printf("\nEnter number");
+                scanf("%d",&value);
+                insertAtLast(&start,value);
+                break;
+            case 3:
+                 printf("\nEnter value after that new value inserted");
+                 scanf("%d",&val);
+                 printf("\nEnter number to be inserted");
+                 scanf("%d",&value);
+                 insertAfterValue(start,val,value);
+                 break;
+            case 4:
+                 value= deleteAtFirst(&start);
+                if(value!=-1)
+                    printf("removed %d",value);
+                else
+                    printf("list is empty");
+                break;
+            case 5:
+                 value= deleteAtLast(&start);
+                if(value!=-1)
+                    printf("removed %d",value);
+                else
+                    printf("list is empty");
+                break;
+            case 6:
+                 printf("\nEnter value after that element is going to delete");
+                 scanf("%d",&val);
+                 deleteAfterValue(start,val);
+                 break;
+         //   case 7:
+                      //val=count(start);
+                      //printf("\n number of elements are %d",val) ;
+                      //break;
+            case 8:
+                    viewList(start);
+                    break;
+            case 9:
+                    exit(0);
+                    break;
+            default:
+                printf("Invalid choice");
+        }
+
+    }
+}
+}
