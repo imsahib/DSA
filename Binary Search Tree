@@ -1,1 +1,209 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct BSTNode
+{
+    struct BSTNode *left;
+    int info;
+    struct BSTNode *right;
+};
+//iterative method
+void insertNode(struct BSTNode **r,int val)
+{
+    struct BSTNode *n,*temp;
+    n=(struct BSTNode*)malloc(sizeof(struct BSTNode));
+    n->left=NULL;
+    n->right=NULL;
+    n->info=val;
+    if(*r==NULL)
+        *r=n;
+    else
+    {
+        temp=*r;
+        while(1)
+        {
+            if(val>=temp->info)
+                {
+                    if(temp->right==NULL)
+                       {
+                        temp->right=n;
+                        break;
+                       }
+                    else
+                    {
+                         temp=temp->right;
+
+                    }
+                }
+            else
+            {
+                if(temp->left==NULL)
+                {
+                    temp->left=n;
+                    break;
+                }
+                else
+                {
+                    temp=temp->left;
+                }
+
+            }
+        }
+    }
+}
+
+int deleteNode(struct BSTNode **r,int data)
+{
+    struct BSTNode *temp,*t=NULL;
+    if(*r==NULL)
+        return -1;
+    else
+    {
+        temp=*r;
+        while(data!=temp->info &&temp!=NULL)
+        {   if(data>temp->info)
+              {
+                t=temp;
+                temp=temp->right;
+              }
+
+             else if(data<temp->info)
+               {
+                 t=temp;
+                 temp=temp->left;
+               }
+        }
+        if(temp!=NULL)
+        {
+            //case 1:  leaf node
+                if(temp->left==NULL && temp->right==NULL)
+                    {
+                      if(t->left==temp)
+                            t->left=NULL;
+                       if(t->right==temp)
+                            t->right=NULL;
+                        printf("%d is deleted\n\n",temp->info);
+                        free(temp);
+                    }
+           // case 2:   single child node
+                else if(temp->left!=NULL&&temp->right==NULL)
+                 {
+                    t->left=temp->left;
+                     printf("%d is deleted\n",temp->info);
+                    free(temp);
+                 }
+                else if(temp->left==NULL&&temp->right!=NULL)
+                {
+                    t->right=temp->right;
+                    printf("%d is deleted\n",temp->info);
+                    free(temp);
+                }
+           //case 3:    both child nodes
+                else if(t->left==temp)
+               {
+                   t->left=temp->right;
+                   t->left->left=temp->left;
+                   printf("%d is deleted\n",temp->info);
+                   free(temp);
+               }
+                else if(t->right==temp)
+                {
+
+                   t->right=temp->right;
+                   t->right->left=temp->left;
+                   printf("%d is deleted\n",temp->info);
+                   free(temp);
+                }
+                else if(data==(*r)->info)
+                {
+                       if(temp->left==NULL &&temp->right==NULL)
+                       {
+                            printf("BST IS EMPTY NOW");
+                            free(temp);
+                            *r=NULL;
+                       }
+                        else if(temp->left!=NULL&&temp->right==NULL)
+                        {
+                            *r=temp->left;
+                            free(temp);
+
+                        }
+                        else if(temp->left==NULL&&temp->right!=NULL)
+                        {
+                            *r=temp->right;
+                            free(temp);
+                        }
+                        else if(temp->left!=NULL &&temp->right!=NULL)
+                        {
+                            printf("\nACCESS DENIED\n");
+
+                        }
+
+
+
+                }
+            return 1;
+
+        }
+        else
+            return 0;
+    }
+}
+
+int preOrder(struct BSTNode *root)
+{
+    if(root==NULL)
+        return 0;
+    else
+    {
+        printf("%d ",root->info);
+        preOrder(root->left);
+        preOrder(root->right);
+    }
+}
+
+
+int menu()
+{
+    int choice;
+    printf("\n1.insert value into BST ");
+    printf("\n2.delete value into BST ");
+    printf("\n3.exit ");
+    printf("\n\nenter your choice");
+    scanf("%d",&choice);
+    return choice;
+}
+
+void main()
+{
+    struct BSTNode *root=NULL;
+    int i,val;
+   while(1)
+   {
+       preOrder(root);
+        //if(i==0)
+        //printf("\nbst is empty");
+        switch(menu())
+        {
+            case 1:
+                    printf("\nenter value to insert in BST ");
+                    scanf("%d",&val);
+                    insertNode(&root,val);
+                    break;
+            case 2:
+                printf("\nenter  value to delete into BST ");
+                scanf("%d",&val);
+                 i=deleteNode(&root,val);
+                 if(i==-1)
+                    printf("\nbst is empty\n");
+                else if(i==0)
+                    printf("\nnot found\n");
+                    break;
+            case 3:
+                exit(0);
+            default:
+                printf("invalid choice");
+        }
+   }
+
+}
 
