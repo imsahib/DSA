@@ -1,0 +1,47 @@
+#include<stdio.h>
+void selection_sort(int[],int);
+int find_min_index(int[],int ,int);
+int count=0;
+void main()
+{
+    int i,n;
+    printf("\nhow many numbers in an array you want to enter\n");
+    scanf("%d",&n);
+    printf("\n Enter :\n");
+    int arr[n];
+    for(i=0;i<n;i++)
+        scanf("%d",&arr[i]);
+    printf("Displaing unsorted array:\n");
+    for(i=0;i<n;i++)
+        printf("%d ",arr[i]);
+    selection_sort(arr,n);
+    printf("\nDisplaying sorted array\n");
+    for(i=0;i<n;i++)
+        printf("%d ",arr[i]);
+    printf("\ncount:%d",count);
+
+}
+void selection_sort(int arr[],int size)
+{
+    int i,min,temp;
+    for(i=0;i<size-1;i++)
+    {
+        min= find_min_index(arr,i,size);
+        temp=arr[min];
+        arr[min]=arr[i];
+        arr[i]=temp;
+    }
+}
+int find_min_index(int arr[],int index,int size)
+{
+    int minIndex,i;
+    //static int count=0;
+    minIndex=index;
+    for(i=index+1;i<size;i++)
+      {
+         if(arr[i]<arr[minIndex])
+            minIndex=i;
+        count++;
+      }
+    return minIndex;
+}
